@@ -1,603 +1,453 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Employee Information Portal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <style>
-        /* ── reset & base ── */
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #eef3fb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 24px;
-        }
-
-        /* ── card ── */
-        .card {
-            width: min(820px, 100%);
-            background: #ffffff;
-            border-radius: 26px;
-            padding: 36px 40px 32px;
-            box-shadow: 0 20px 60px rgba(31, 73, 125, 0.10);
-            transition: box-shadow 0.25s ease;
-        }
-
-        .card--submitted {
-            box-shadow: 0 20px 60px rgba(31, 73, 125, 0.06);
-        }
-
-        /* ── logo ── */
-        .logo {
-            width: 68px;
-            height: 68px;
-            margin: 0 auto 16px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #2f6df5, #5b95ff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 800;
-            font-size: 28px;
-            letter-spacing: -1px;
-            user-select: none;
-        }
-
-        /* ── headings ── */
-        h1 {
-            margin: 0;
-            text-align: center;
-            font-size: 30px;
-            font-weight: 700;
-            color: #22314d;
-            letter-spacing: -0.3px;
-        }
-
-        .sub {
-            margin: 6px 0 26px;
-            text-align: center;
-            color: #68768f;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.5;
-        }
-
-        /* ── form fields ── */
-        .field {
-            margin-bottom: 14px;
-        }
-
-        .field label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #34435e;
-            letter-spacing: -0.2px;
-        }
-
-        .field input,
-        .field select {
-            width: 100%;
-            height: 48px;
-            border: 1px solid #d8e2f2;
-            border-radius: 14px;
-            padding: 0 16px;
-            font-size: 15px;
-            font-weight: 400;
-            font-family: inherit;
-            color: #1e2b3f;
-            background: #ffffff;
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            appearance: auto;
-        }
-
-        .field input::placeholder {
-            color: #a8b6ce;
-            font-weight: 400;
-        }
-
-        .field input:focus,
-        .field select:focus {
-            border-color: #3f7cff;
-            box-shadow: 0 0 0 4px rgba(63, 124, 255, 0.10);
-        }
-
-        .field input:disabled,
-        .field select:disabled {
-            background: #f5f8fd;
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        /* ── grid ── */
-        .grid2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        /* ── submit button ── */
-        .submit-wrap {
-            margin-top: 6px;
-        }
-
-        .submit-btn {
-            width: 100%;
-            height: 54px;
-            border: none;
-            border-radius: 16px;
-            background: linear-gradient(90deg, #2f6df5, #3678f6);
-            color: #ffffff;
-            font-size: 17px;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: pointer;
-            transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-            letter-spacing: -0.2px;
-            position: relative;
-        }
-
-        .submit-btn:hover:not(:disabled) {
-            box-shadow: 0 8px 24px rgba(47, 109, 245, 0.30);
-            transform: translateY(-1px);
-        }
-
-        .submit-btn:active:not(:disabled) {
-            transform: translateY(0px);
-            box-shadow: 0 4px 12px rgba(47, 109, 245, 0.25);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .submit-btn .btn-text {
-            display: inline-block;
-        }
-
-        .submit-btn .spinner {
-            display: none;
-            width: 22px;
-            height: 22px;
-            margin: 0 auto;
-            border: 2.5px solid rgba(255, 255, 255, 0.25);
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-        }
-
-        .submit-btn.is-loading .btn-text {
-            display: none;
-        }
-        .submit-btn.is-loading .spinner {
-            display: block;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* ── message area ── */
-        .message {
-            margin-top: 16px;
-            padding: 14px 18px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 500;
-            line-height: 1.5;
-            display: none;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .message--success {
-            display: flex;
-            background: #e8f5ee;
-            color: #0e6245;
-            border: 1px solid #b8dfd0;
-        }
-
-        .message--error {
-            display: flex;
-            background: #fdf0ed;
-            color: #a33a2e;
-            border: 1px solid #f5d4ce;
-        }
-
-        .message--success .msg-icon,
-        .message--error .msg-icon {
-            flex-shrink: 0;
-            font-size: 20px;
-            line-height: 1;
-        }
-
-        .message .msg-text {
-            flex: 1;
-        }
-
-        /* ── responsive ── */
-        @media (max-width: 700px) {
-            .card {
-                padding: 28px 20px 24px;
-            }
-            .grid2 {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-            h1 {
-                font-size: 26px;
-            }
-            .logo {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
-            }
-            .submit-btn {
-                height: 50px;
-                font-size: 16px;
-            }
-            .field input,
-            .field select {
-                height: 46px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 440px) {
-            body {
-                padding: 12px;
-            }
-            .card {
-                padding: 22px 16px 20px;
-                border-radius: 20px;
-            }
-            h1 {
-                font-size: 22px;
-            }
-            .sub {
-                font-size: 13px;
-                margin-bottom: 20px;
-            }
-            .field label {
-                font-size: 13px;
-            }
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Employee Information Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* ── styles identical to refined version ── */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #eef3fb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+  .card {
+    width: min(820px, 100%);
+    background: #ffffff;
+    border-radius: 26px;
+    padding: 36px 40px 32px;
+    box-shadow: 0 20px 60px rgba(31, 73, 125, 0.10);
+    transition: box-shadow 0.25s ease;
+  }
+  .card--submitted { box-shadow: 0 20px 60px rgba(31, 73, 125, 0.06); }
+  .logo {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 16px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #2f6df5, #5b95ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -1px;
+    user-select: none;
+  }
+  h1 {
+    margin: 0;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #22314d;
+    letter-spacing: -0.3px;
+  }
+  .sub {
+    margin: 6px 0 26px;
+    text-align: center;
+    color: #68768f;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #34435e;
+    letter-spacing: -0.2px;
+  }
+  .field input, .field select {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #d8e2f2;
+    border-radius: 14px;
+    padding: 0 16px;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: inherit;
+    color: #1e2b3f;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: auto;
+  }
+  .field input::placeholder { color: #a8b6ce; }
+  .field input:focus, .field select:focus {
+    border-color: #3f7cff;
+    box-shadow: 0 0 0 4px rgba(63, 124, 255, 0.10);
+  }
+  .field input:disabled, .field select:disabled {
+    background: #f5f8fd;
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .submit-wrap { margin-top: 6px; }
+  .submit-btn {
+    width: 100%;
+    height: 54px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #2f6df5, #3678f6);
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    letter-spacing: -0.2px;
+    position: relative;
+  }
+  .submit-btn:hover:not(:disabled) {
+    box-shadow: 0 8px 24px rgba(47, 109, 245, 0.30);
+    transform: translateY(-1px);
+  }
+  .submit-btn:active:not(:disabled) {
+    transform: translateY(0px);
+    box-shadow: 0 4px 12px rgba(47, 109, 245, 0.25);
+  }
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .submit-btn .btn-text { display: inline-block; }
+  .submit-btn .spinner {
+    display: none;
+    width: 22px;
+    height: 22px;
+    margin: 0 auto;
+    border: 2.5px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  .submit-btn.is-loading .btn-text { display: none; }
+  .submit-btn.is-loading .spinner { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .message {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  .message--success {
+    display: flex;
+    background: #e8f5ee;
+    color: #0e6245;
+    border: 1px solid #b8dfd0;
+  }
+  .message--error {
+    display: flex;
+    background: #fdf0ed;
+    color: #a33a2e;
+    border: 1px solid #f5d4ce;
+  }
+  .message--success .msg-icon, .message--error .msg-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    line-height: 1;
+  }
+  .message .msg-text { flex: 1; }
+  @media (max-width: 700px) {
+    .card { padding: 28px 20px 24px; }
+    .grid2 { grid-template-columns: 1fr; gap: 0; }
+    h1 { font-size: 26px; }
+    .logo { width: 60px; height: 60px; font-size: 24px; }
+    .submit-btn { height: 50px; font-size: 16px; }
+    .field input, .field select { height: 46px; font-size: 14px; }
+  }
+  @media (max-width: 440px) {
+    body { padding: 12px; }
+    .card { padding: 22px 16px 20px; border-radius: 20px; }
+    h1 { font-size: 22px; }
+    .sub { font-size: 13px; margin-bottom: 20px; }
+    .field label { font-size: 13px; }
+  }
+</style>
 </head>
 <body>
 
-    <div class="card" id="app">
-        <!-- logo -->
-        <div class="logo">SDC</div>
+<div class="card" id="app">
+  <div class="logo">SDC</div>
+  <h1>Employee Information Portal</h1>
+  <div class="sub">Please complete your banking information accurately.</div>
 
-        <!-- heading -->
-        <h1>Employee Information Portal</h1>
-        <div class="sub">Please complete your banking information accurately.</div>
-
-        <!-- ─── form ─── -->
-        <form id="employeeForm" novalidate>
-
-            <!-- Employee Name -->
-            <div class="field">
-                <label for="empName">Employee Name</label>
-                <input
-                id="empName"
-                type="text"
-                placeholder="Enter your full name"
-                autocomplete="name"
-                required
-                />
-            </div>
-
-            <!-- Phone + CNIC (grid) -->
-            <div class="grid2">
-                <div class="field">
-                    <label for="phone">Phone Number</label>
-                    <input
-                    id="phone"
-                    type="text"
-                    maxlength="12"
-                    placeholder="03XX-XXXXXXX"
-                    autocomplete="tel"
-                    required
-                    />
-                </div>
-                <div class="field">
-                    <label for="cnic">CNIC</label>
-                    <input
-                    id="cnic"
-                    type="text"
-                    maxlength="15"
-                    placeholder="XXXXX-XXXXXXX-X"
-                    required
-                    />
-                </div>
-            </div>
-
-            <!-- Account Holder -->
-            <div class="field">
-                <label for="accHolder">Account Holder Name</label>
-                <input
-                id="accHolder"
-                type="text"
-                placeholder="As printed on bank account"
-                autocomplete="off"
-                required
-                />
-            </div>
-
-            <!-- Bank Name + Account Number (grid) -->
-            <div class="grid2">
-                <div class="field">
-                    <label for="bankName">Bank Name</label>
-                    <select id="bankName" required>
-                        <option value="">Select Bank</option>
-                        <option value="Bank Alfalah">Bank Alfalah</option>
-                        <option value="HBL">HBL</option>
-                        <option value="UBL">UBL</option>
-                        <option value="MCB">MCB</option>
-                        <option value="Allied Bank">Allied Bank</option>
-                        <option value="Meezan Bank">Meezan Bank</option>
-                        <option value="Askari Bank">Askari Bank</option>
-                        <option value="Bank Al Habib">Bank Al Habib</option>
-                        <option value="BankIslami">BankIslami</option>
-                        <option value="Faysal Bank">Faysal Bank</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label for="accNumber">Account Number</label>
-                    <input
-                    id="accNumber"
-                    type="text"
-                    placeholder="Enter account number"
-                    autocomplete="off"
-                    required
-                    />
-                </div>
-            </div>
-
-            <!-- IBAN -->
-            <div class="field">
-                <label for="iban">IBAN</label>
-                <input
-                id="iban"
-                type="text"
-                placeholder="PK99-XXXX-XXXXXXXXXX-XX"
-                autocomplete="off"
-                required
-                />
-            </div>
-
-            <!-- submit -->
-            <div class="submit-wrap">
-                <button class="submit-btn" type="submit" id="submitBtn">
-                    <span class="btn-text">Submit Information</span>
-                    <span class="spinner"></span>
-                </button>
-            </div>
-
-        </form>
-
-        <!-- message -->
-        <div class="message" id="message" role="alert">
-            <span class="msg-icon"></span>
-            <span class="msg-text"></span>
-        </div>
+  <form id="employeeForm" novalidate>
+    <div class="field">
+      <label for="empName">Employee Name</label>
+      <input id="empName" type="text" placeholder="Enter your full name" autocomplete="name" required />
     </div>
 
-    <!-- ─── JavaScript ─── -->
-    <script>
-        (function() {
-            'use strict';
+    <div class="grid2">
+      <div class="field">
+        <label for="phone">Phone Number</label>
+        <input id="phone" type="text" maxlength="12" placeholder="03XX-XXXXXXX" autocomplete="tel" required />
+      </div>
+      <div class="field">
+        <label for="cnic">CNIC</label>
+        <input id="cnic" type="text" maxlength="15" placeholder="XXXXX-XXXXXXX-X" required />
+      </div>
+    </div>
 
-            // ── DOM refs ──
-            const form = document.getElementById('employeeForm');
-            const submitBtn = document.getElementById('submitBtn');
-            const messageEl = document.getElementById('message');
+    <div class="field">
+      <label for="accHolder">Account Holder Name</label>
+      <input id="accHolder" type="text" placeholder="As printed on bank account" autocomplete="off" required />
+    </div>
 
-            const empName = document.getElementById('empName');
-            const phone = document.getElementById('phone');
-            const cnic = document.getElementById('cnic');
-            const accHolder = document.getElementById('accHolder');
-            const bankName = document.getElementById('bankName');
-            const accNumber = document.getElementById('accNumber');
-            const iban = document.getElementById('iban');
+    <div class="grid2">
+      <div class="field">
+        <label for="bankName">Bank Name</label>
+        <select id="bankName" required>
+          <option value="">Select Bank</option>
+          <option value="Bank Alfalah">Bank Alfalah</option>
+          <option value="HBL">HBL</option>
+          <option value="UBL">UBL</option>
+          <option value="MCB">MCB</option>
+          <option value="Allied Bank">Allied Bank</option>
+          <option value="Meezan Bank">Meezan Bank</option>
+          <option value="Askari Bank">Askari Bank</option>
+          <option value="Bank Al Habib">Bank Al Habib</option>
+          <option value="BankIslami">BankIslami</option>
+          <option value="Faysal Bank">Faysal Bank</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="accNumber">Account Number</label>
+        <input id="accNumber" type="text" placeholder="Enter account number" autocomplete="off" required />
+      </div>
+    </div>
 
-            // ── formatting helpers ──
-            function formatPhone(raw) {
-                const digits = raw.replace(/\D/g, '').slice(0, 11);
-                if (digits.length <= 4) return digits;
-                return digits.slice(0, 4) + '-' + digits.slice(4);
-            }
+    <div class="field">
+      <label for="iban">IBAN</label>
+      <input id="iban" type="text" placeholder="PK99-XXXX-XXXXXXXXXX-XX" autocomplete="off" required />
+    </div>
 
-            function formatCNIC(raw) {
-                const digits = raw.replace(/\D/g, '').slice(0, 13);
-                if (digits.length <= 5) return digits;
-                if (digits.length <= 12) return digits.slice(0, 5) + '-' + digits.slice(5);
-                return digits.slice(0, 5) + '-' + digits.slice(5, 12) + '-' + digits.slice(12);
-            }
+    <div class="submit-wrap">
+      <button class="submit-btn" type="submit" id="submitBtn">
+        <span class="btn-text">Submit Information</span>
+        <span class="spinner"></span>
+      </button>
+    </div>
+  </form>
 
-            // ── input formatting (live) ──
-            phone.addEventListener('input', function(e) {
-                const cursor = this.selectionStart;
-                const raw = this.value;
-                const formatted = formatPhone(raw);
-                if (formatted !== raw) {
-                    this.value = formatted;
-                    // preserve cursor
-                    const newPos = Math.min(cursor, formatted.length);
-                    this.setSelectionRange(newPos, newPos);
-                }
-            });
+  <div class="message" id="message" role="alert">
+    <span class="msg-icon"></span>
+    <span class="msg-text"></span>
+  </div>
+</div>
 
-            cnic.addEventListener('input', function(e) {
-                const cursor = this.selectionStart;
-                const raw = this.value;
-                const formatted = formatCNIC(raw);
-                if (formatted !== raw) {
-                    this.value = formatted;
-                    const newPos = Math.min(cursor, formatted.length);
-                    this.setSelectionRange(newPos, newPos);
-                }
-            });
+<script>
+  (function() {
+    'use strict';
 
-            // ── show message ──
-            function showMessage(type, text) {
-                messageEl.className = 'message message--' + type;
-                const icon = messageEl.querySelector('.msg-icon');
-                const txt = messageEl.querySelector('.msg-text');
-                icon.textContent = type === 'success' ? '✓' : '✕';
-                txt.textContent = text;
-                messageEl.style.display = 'flex';
-            }
+    // ─── CONFIGURATION ──────────────────────────────────────────────
+    // Replace with your actual Apps Script Web App URL (deployed as "Anyone" or "Anyone with link").
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwyTDzRi6AhxpOWv47ssN9IQGRz9FpsvWtNS52ZPTmL8-ml1qKt-cV4bfxseJxQQF6F/exec';
 
-            function hideMessage() {
-                messageEl.className = 'message';
-                messageEl.style.display = 'none';
-            }
+    // ─── DOM refs ──────────────────────────────────────────────────
+    const form = document.getElementById('employeeForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageEl = document.getElementById('message');
 
-            // ── set loading state ──
-            function setLoading(loading) {
-                if (loading) {
-                    submitBtn.classList.add('is-loading');
-                    submitBtn.disabled = true;
-                } else {
-                    submitBtn.classList.remove('is-loading');
-                    submitBtn.disabled = false;
-                }
-            }
+    const empName = document.getElementById('empName');
+    const phone = document.getElementById('phone');
+    const cnic = document.getElementById('cnic');
+    const accHolder = document.getElementById('accHolder');
+    const bankName = document.getElementById('bankName');
+    const accNumber = document.getElementById('accNumber');
+    const iban = document.getElementById('iban');
 
-            // ── reset form ──
-            function resetForm() {
-                form.reset();
-                // clear formatting from phone/cnic
-                phone.value = '';
-                cnic.value = '';
-                // remove any disabled state from inputs
-                const inputs = form.querySelectorAll('input, select');
-                inputs.forEach(el => el.disabled = false);
-            }
+    // ─── formatting helpers ──────────────────────────────────────
+    function formatPhone(raw) {
+      const digits = raw.replace(/\D/g, '').slice(0, 11);
+      if (digits.length <= 4) return digits;
+      return digits.slice(0, 4) + '-' + digits.slice(4);
+    }
 
-            // ── validate fields ──
-            function validateForm() {
-                const name = empName.value.trim();
-                const phoneVal = phone.value.replace(/\D/g, '');
-                const cnicVal = cnic.value.replace(/\D/g, '');
-                const holder = accHolder.value.trim();
-                const bank = bankName.value;
-                const accNum = accNumber.value.trim();
-                const ibanVal = iban.value.trim();
+    function formatCNIC(raw) {
+      const digits = raw.replace(/\D/g, '').slice(0, 13);
+      if (digits.length <= 5) return digits;
+      if (digits.length <= 12) return digits.slice(0, 5) + '-' + digits.slice(5);
+      return digits.slice(0, 5) + '-' + digits.slice(5, 12) + '-' + digits.slice(12);
+    }
 
-                if (!name) { showMessage('error', 'Please enter the employee name.'); return false; }
-                if (name.length < 2) { showMessage('error', 'Name must be at least 2 characters.'); return false; }
+    // ─── live formatting ──────────────────────────────────────────
+    phone.addEventListener('input', function(e) {
+      const cursor = this.selectionStart;
+      const raw = this.value;
+      const formatted = formatPhone(raw);
+      if (formatted !== raw) {
+        this.value = formatted;
+        const newPos = Math.min(cursor, formatted.length);
+        this.setSelectionRange(newPos, newPos);
+      }
+    });
 
-                if (phoneVal.length !== 11) { showMessage('error', 'Phone number must be 11 digits (e.g. 03XX-XXXXXXX).');
-                    return false; }
+    cnic.addEventListener('input', function(e) {
+      const cursor = this.selectionStart;
+      const raw = this.value;
+      const formatted = formatCNIC(raw);
+      if (formatted !== raw) {
+        this.value = formatted;
+        const newPos = Math.min(cursor, formatted.length);
+        this.setSelectionRange(newPos, newPos);
+      }
+    });
 
-                if (cnicVal.length !== 13) { showMessage('error', 'CNIC must be 13 digits (e.g. XXXXX-XXXXXXX-X).');
-                    return false; }
+    // ─── message helpers ──────────────────────────────────────────
+    function showMessage(type, text) {
+      messageEl.className = 'message message--' + type;
+      const icon = messageEl.querySelector('.msg-icon');
+      const txt = messageEl.querySelector('.msg-text');
+      icon.textContent = type === 'success' ? '✓' : '✕';
+      txt.textContent = text;
+      messageEl.style.display = 'flex';
+    }
 
-                if (!holder) { showMessage('error', 'Please enter the account holder name.'); return false; }
-                if (holder.length < 2) { showMessage('error', 'Account holder name must be at least 2 characters.');
-                    return false; }
+    function hideMessage() {
+      messageEl.className = 'message';
+      messageEl.style.display = 'none';
+    }
 
-                if (!bank) { showMessage('error', 'Please select a bank.'); return false; }
+    // ─── loading state ────────────────────────────────────────────
+    function setLoading(loading) {
+      if (loading) {
+        submitBtn.classList.add('is-loading');
+        submitBtn.disabled = true;
+      } else {
+        submitBtn.classList.remove('is-loading');
+        submitBtn.disabled = false;
+      }
+    }
 
-                if (!accNum) { showMessage('error', 'Please enter the account number.'); return false; }
-                if (accNum.length < 4) { showMessage('error', 'Account number must be at least 4 characters.'); return false; }
+    // ─── reset form ───────────────────────────────────────────────
+    function resetForm() {
+      form.reset();
+      phone.value = '';
+      cnic.value = '';
+      const inputs = form.querySelectorAll('input, select');
+      inputs.forEach(el => el.disabled = false);
+    }
 
-                if (!ibanVal) { showMessage('error', 'Please enter the IBAN.'); return false; }
-                if (ibanVal.length < 10) { showMessage('error', 'IBAN must be at least 10 characters.'); return false; }
+    // ─── validation ───────────────────────────────────────────────
+    function validateForm() {
+      const name = empName.value.trim();
+      const phoneVal = phone.value.replace(/\D/g, '');
+      const cnicVal = cnic.value.replace(/\D/g, '');
+      const holder = accHolder.value.trim();
+      const bank = bankName.value;
+      const accNum = accNumber.value.trim();
+      const ibanVal = iban.value.trim();
 
-                hideMessage();
-                return true;
-            }
+      if (!name) { showMessage('error', 'Please enter the employee name.'); return false; }
+      if (name.length < 2) { showMessage('error', 'Name must be at least 2 characters.'); return false; }
 
-            // ── submit handler ──
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+      if (phoneVal.length !== 11) { showMessage('error', 'Phone number must be 11 digits (e.g. 03XX-XXXXXXX).'); return false; }
 
-                // reset message
-                hideMessage();
+      if (cnicVal.length !== 13) { showMessage('error', 'CNIC must be 13 digits (e.g. XXXXX-XXXXXXX-X).'); return false; }
 
-                // validate
-                if (!validateForm()) return;
+      if (!holder) { showMessage('error', 'Please enter the account holder name.'); return false; }
+      if (holder.length < 2) { showMessage('error', 'Account holder name must be at least 2 characters.'); return false; }
 
-                // gather data
-                const payload = {
-                    employeeName: empName.value.trim(),
-                    phoneNumber: phone.value.trim(),
-                    cnic: cnic.value.trim(),
-                    accountHolder: accHolder.value.trim(),
-                    bankName: bankName.value,
-                    accountNumber: accNumber.value.trim(),
-                    iban: iban.value.trim()
-                };
+      if (!bank) { showMessage('error', 'Please select a bank.'); return false; }
 
-                // lock UI
-                setLoading(true);
+      if (!accNum) { showMessage('error', 'Please enter the account number.'); return false; }
+      if (accNum.length < 4) { showMessage('error', 'Account number must be at least 4 characters.'); return false; }
 
-                // call Apps Script
-                google.script.run
-                    .withSuccessHandler(function(result) {
-                        setLoading(false);
-                        if (result.status === 'success') {
-                            showMessage('success', '✓ Information submitted successfully.');
-                            submitBtn.disabled = true;
-                            // disable all inputs
-                            const inputs = form.querySelectorAll('input, select');
-                            inputs.forEach(el => el.disabled = true);
-                            // clear after delay
-                            setTimeout(function() {
-                                resetForm();
-                                const inputs2 = form.querySelectorAll('input, select');
-                                inputs2.forEach(el => el.disabled = false);
-                                submitBtn.disabled = false;
-                                hideMessage();
-                            }, 3000);
-                        } else {
-                            showMessage('error', result.message || 'Something went wrong. Please try again.');
-                            submitBtn.disabled = false;
-                        }
-                    })
-                    .withFailureHandler(function(err) {
-                        setLoading(false);
-                        showMessage('error', 'Network error. Please check your connection and try again.');
-                        submitBtn.disabled = false;
-                        console.error('Apps Script error:', err);
-                    })
-                    .submitEmployeeInformation(payload);
-            });
+      if (!ibanVal) { showMessage('error', 'Please enter the IBAN.'); return false; }
+      if (ibanVal.length < 10) { showMessage('error', 'IBAN must be at least 10 characters.'); return false; }
 
-            // ── hide message on typing ──
-            form.querySelectorAll('input, select').forEach(function(el) {
-                el.addEventListener('input', hideMessage);
-                el.addEventListener('change', hideMessage);
-            });
+      hideMessage();
+      return true;
+    }
 
-            // ── expose for debugging (optional) ──
-            console.log('Employee Portal ready. Spreadsheet: Employee_Details');
+    // ─── submit handler (fetch) ──────────────────────────────────
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      hideMessage();
 
-        })();
-    </script>
+      if (!validateForm()) return;
+
+      const payload = {
+        employeeName: empName.value.trim(),
+        phoneNumber: phone.value.trim(),
+        cnic: cnic.value.trim(),
+        accountHolder: accHolder.value.trim(),
+        bankName: bankName.value,
+        accountNumber: accNumber.value.trim(),
+        iban: iban.value.trim()
+      };
+
+      setLoading(true);
+
+      fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'cors',          // required for cross-origin requests
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(result => {
+        setLoading(false);
+        if (result.status === 'success') {
+          showMessage('success', '✓ Information submitted successfully.');
+          submitBtn.disabled = true;
+          const inputs = form.querySelectorAll('input, select');
+          inputs.forEach(el => el.disabled = true);
+          setTimeout(function() {
+            resetForm();
+            const inputs2 = form.querySelectorAll('input, select');
+            inputs2.forEach(el => el.disabled = false);
+            submitBtn.disabled = false;
+            hideMessage();
+          }, 3000);
+        } else {
+          showMessage('error', result.message || 'Something went wrong. Please try again.');
+          submitBtn.disabled = false;
+        }
+      })
+      .catch(error => {
+        setLoading(false);
+        showMessage('error', 'Network error. Could not reach the server. Please check your connection.');
+        submitBtn.disabled = false;
+        console.error('Fetch error:', error);
+      });
+    });
+
+    // ─── hide message on typing ──────────────────────────────────
+    form.querySelectorAll('input, select').forEach(el => {
+      el.addEventListener('input', hideMessage);
+      el.addEventListener('change', hideMessage);
+    });
+
+    console.log('Employee Portal ready. Backend URL:', WEB_APP_URL);
+  })();
+</script>
 
 </body>
 </html>
