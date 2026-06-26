@@ -263,8 +263,8 @@
   (function() {
     'use strict';
 
-    // ─── CONFIGURATION ──────────────────────────────────────────────
-    // Replace with your actual Apps Script Web App URL (deployed as "Anyone" or "Anyone with link").
+    // ─── CONFIG ────────────────────────────────────────────────────
+    // Replace with your actual Apps Script Web App URL.
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwyTDzRi6AhxpOWv47ssN9IQGRz9FpsvWtNS52ZPTmL8-ml1qKt-cV4bfxseJxQQF6F/exec';
 
     // ─── DOM refs ──────────────────────────────────────────────────
@@ -384,32 +384,29 @@
       return true;
     }
 
-    // ─── submit handler (fetch) ──────────────────────────────────
+    // ─── submit handler (fetch with URLSearchParams) ──────────────
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       hideMessage();
 
       if (!validateForm()) return;
 
-      const payload = {
-        employeeName: empName.value.trim(),
-        phoneNumber: phone.value.trim(),
-        cnic: cnic.value.trim(),
-        accountHolder: accHolder.value.trim(),
-        bankName: bankName.value,
-        accountNumber: accNumber.value.trim(),
-        iban: iban.value.trim()
-      };
+      // Build URLSearchParams from form values
+      const params = new URLSearchParams();
+      params.append('employeeName', empName.value.trim());
+      params.append('phoneNumber', phone.value.trim());
+      params.append('cnic', cnic.value.trim());
+      params.append('accountHolder', accHolder.value.trim());
+      params.append('bankName', bankName.value);
+      params.append('accountNumber', accNumber.value.trim());
+      params.append('iban', iban.value.trim());
 
       setLoading(true);
 
+      // Send as application/x-www-form-urlencoded (no custom headers)
       fetch(WEB_APP_URL, {
         method: 'POST',
-        mode: 'cors',          // required for cross-origin requests
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
+        body: params   // browser sets Content-Type automatically
       })
       .then(response => response.json())
       .then(result => {
