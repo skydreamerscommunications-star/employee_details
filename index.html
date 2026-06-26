@@ -3,194 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sky Dreamers • Employee Information Portal</title>
+<title>Employee Information Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
- --blue:#1f6fff;
- --blue2:#2f80ff;
- --bg:#f5f7fb;
- --text:#223046;
- --border:#dbe4f0;
-}
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:Inter,sans-serif;
- background:linear-gradient(180deg,#f8fbff,#eef3fa);
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:24px;
- color:var(--text);
-}
-.card{
- width:min(720px,100%);
- background:rgba(255,255,255,.82);
- backdrop-filter:blur(14px);
- border:1px solid rgba(255,255,255,.65);
- border-radius:18px;
- box-shadow:0 18px 50px rgba(30,60,114,.12);
- padding:42px;
-}
-.logo{
- width:68px;height:68px;border-radius:16px;
- background:linear-gradient(135deg,var(--blue),#6fb0ff);
- color:#fff;font-weight:700;font-size:28px;
- display:flex;align-items:center;justify-content:center;
- margin:0 auto 18px;
-}
-h1{margin:0;text-align:center;font-size:30px}
-.sub{margin:10px 0 34px;text-align:center;color:#68768c}
-.grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:18px;
-}
-.field.full{grid-column:1/-1}
-label{
- display:block;
- font-size:13px;
- font-weight:600;
- margin-bottom:8px;
-}
-input,select{
- width:100%;
- height:46px;
- border:1px solid var(--border);
- border-radius:12px;
- padding:0 14px;
- font-size:14px;
- font-family:inherit;
- background:#fff;
- transition:.2s;
-}
-input:focus,select:focus{
- outline:none;
- border-color:var(--blue);
- box-shadow:0 0 0 4px rgba(31,111,255,.12);
-}
-button{
- width:100%;
- margin-top:28px;
- height:50px;
- border:none;
- border-radius:14px;
- background:linear-gradient(135deg,var(--blue),var(--blue2));
- color:#fff;
- font-weight:700;
- font-size:15px;
- cursor:pointer;
- transition:.2s;
-}
-button:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(31,111,255,.25)}
-button:disabled{opacity:.7;cursor:not-allowed}
-#msg{
- margin-top:18px;
- text-align:center;
- font-weight:600;
- color:#1d7f39;
- display:none;
-}
-@media(max-width:700px){
- .card{padding:28px}
- .grid{grid-template-columns:1fr}
- h1{font-size:26px}
-}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,sans-serif;background:#eef3fb;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.card{width:min(820px,100%);background:#fff;border-radius:26px;padding:40px 42px;box-shadow:0 20px 60px rgba(31,73,125,.12)}
+.logo{width:72px;height:72px;margin:0 auto 18px;border-radius:18px;background:linear-gradient(135deg,#2f6df5,#5b95ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:30px;letter-spacing:-1px}
+h1{margin:0;text-align:center;font-size:32px;color:#22314d}
+.sub{margin:10px 0 30px;text-align:center;color:#68768f;font-size:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field{margin-bottom:18px}
+label{display:block;margin-bottom:8px;font-size:15px;font-weight:600;color:#34435e}
+input,select{width:100%;height:48px;border:1px solid #d8e2f2;border-radius:14px;padding:0 16px;font-size:16px;outline:none}
+input:focus,select:focus{border-color:#3f7cff;box-shadow:0 0 0 4px rgba(63,124,255,.12)}
+button{width:100%;margin-top:8px;height:54px;border:none;border-radius:16px;background:linear-gradient(90deg,#2f6df5,#3678f6);color:#fff;font-size:18px;font-weight:700;cursor:pointer}
+@media(max-width:700px){.card{padding:28px}.grid2{grid-template-columns:1fr}h1{font-size:28px}}
 </style>
 </head>
 <body>
 <div class="card">
-<div class="logo">SD</div>
+<div class="logo">SDC</div>
 <h1>Employee Information Portal</h1>
-<p class="sub">Please complete your banking information accurately.</p>
+<div class="sub">Please complete your banking information accurately.</div>
 
-<form id="employeeForm">
-<div class="grid">
-<div class="field full">
+<div class="field">
 <label>Employee Name</label>
-<input id="name" required placeholder="Enter your full name">
+<input type="text" placeholder="Enter your full name">
 </div>
 
+<div class="grid2">
 <div class="field">
 <label>Phone Number</label>
-<input id="phone" maxlength="13" placeholder="03XX-XXXXXXX" required>
+<input id="phone" maxlength="12" placeholder="0320-1234567">
 </div>
-
 <div class="field">
 <label>CNIC</label>
-<input id="cnic" maxlength="15" placeholder="XXXXX-XXXXXXX-X" required>
+<input id="cnic" maxlength="15" placeholder="37406-0756843-5">
+</div>
 </div>
 
-<div class="field full">
+<div class="field">
 <label>Account Holder Name</label>
-<input id="holder" required placeholder="As printed on bank account">
+<input type="text" placeholder="As printed on bank account">
 </div>
 
+<div class="grid2">
 <div class="field">
 <label>Bank Name</label>
-<select id="bank" required>
-<option value="">Select Bank</option>
+<select>
+<option>Select Bank</option>
 <option>Bank Alfalah</option>
 <option>HBL</option>
-<option>Meezan Bank</option>
-<option>MCB Bank</option>
 <option>UBL</option>
+<option>MCB</option>
 <option>Allied Bank</option>
+<option>Meezan Bank</option>
 <option>Askari Bank</option>
 <option>Bank Al Habib</option>
+<option>BankIslami</option>
 <option>Faysal Bank</option>
-<option>EasyPaisa</option>
-<option>JazzCash</option>
-<option>Other</option>
 </select>
+</div>
+<div class="field">
+<label>Account Number</label>
+<input type="text">
+</div>
 </div>
 
 <div class="field">
-<label>Account Number</label>
-<input id="account" required>
-</div>
-
-<div class="field full">
 <label>IBAN</label>
-<input id="iban" style="text-transform:uppercase" required placeholder="PK36ABCD0000000000000000">
-</div>
+<input type="text" placeholder="PK17ALFH0008001008952877">
 </div>
 
-<button id="submitBtn" type="submit">Submit Information</button>
-<div id="msg">Information submitted successfully.</div>
-</form>
+<button>Submit Information</button>
 </div>
 
 <script>
-const phone=document.getElementById("phone");
-phone.addEventListener("input",e=>{
- let v=e.target.value.replace(/\D/g,'').slice(0,11);
- if(v.length>4)v=v.slice(0,4)+"-"+v.slice(4);
- e.target.value=v;
-});
-const cnic=document.getElementById("cnic");
-cnic.addEventListener("input",e=>{
- let v=e.target.value.replace(/\D/g,'').slice(0,13);
- if(v.length>5)v=v.slice(0,5)+"-"+v.slice(5);
- if(v.length>13)v=v.slice(0,13)+"-"+v.slice(13);
- if(v.length===13)v=v.slice(0,5)+"-"+v.slice(5,12)+"-"+v.slice(12);
- e.target.value=v;
-});
-document.getElementById("employeeForm").addEventListener("submit",function(e){
- e.preventDefault();
- const btn=document.getElementById("submitBtn");
- btn.disabled=true;
- btn.textContent="Submitting...";
- // TODO: Replace with Apps Script fetch()
- setTimeout(()=>{
-   btn.textContent="Submitted";
-   document.getElementById("msg").style.display="block";
- },900);
-});
+function formatPhone(v){
+ let d=v.replace(/\D/g,'').slice(0,11);
+ if(d.length>4)d=d.slice(0,4)+"-"+d.slice(4);
+ return d;
+}
+function formatCNIC(v){
+ let d=v.replace(/\D/g,'').slice(0,13);
+ if(d.length<=5)return d;
+ if(d.length<=12)return d.slice(0,5)+"-"+d.slice(5);
+ return d.slice(0,5)+"-"+d.slice(5,12)+"-"+d.slice(12);
+}
+phone.addEventListener("input",e=>e.target.value=formatPhone(e.target.value));
+cnic.addEventListener("input",e=>e.target.value=formatCNIC(e.target.value));
 </script>
 </body>
 </html>
